@@ -1,5 +1,6 @@
 # ---- build stage: compile YAGPDB from source (there are no official binaries) ----
-FROM golang:1.24-alpine AS build
+FROM golang:1.26-alpine AS build
+ENV GOTOOLCHAIN=auto
 ARG YAGPDB_VERSION=master
 RUN apk add --no-cache git
 RUN git clone --depth 1 --branch ${YAGPDB_VERSION} https://github.com/botlabs-gg/yagpdb.git /src
@@ -14,7 +15,6 @@ RUN apk add --no-cache \
     postgresql16 postgresql16-contrib \
     redis supervisor
 
-# Pterodactyl runs the container as a non-root "container" user; only /home/container persists.
 RUN adduser -D -h /home/container container
 
 COPY --from=build /yagpdb /app/yagpdb

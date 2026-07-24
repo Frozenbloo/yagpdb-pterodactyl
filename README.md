@@ -56,4 +56,5 @@ See [CHANGELOG.md](CHANGELOG.md) for what changed between versions.
 
 ## License
 
-[MIT](LICENSE). YAGPDB itself is also MIT-licensed.
+[MIT](LICENSE).
+YAGPDB itself is also MIT-licensed.
