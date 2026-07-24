@@ -1,0 +1,82 @@
+{
+    "_comment": "YAGPDB all-in-one (Postgres + Redis + bot) for Pterodactyl.",
+    "meta": {
+        "version": "PTDL_v2",
+        "update_url": null
+    },
+    "exported_at": "2026-07-24T00:00:00+00:00",
+    "name": "YAGPDB (All-in-One)",
+    "author": "tomwbloomer@gmail.com",
+    "description": "Yet Another General Purpose Discord Bot, self-hosted. Bundles PostgreSQL, Redis and the bot in one container via supervisord. Requires a reverse proxy with TLS in front for Discord OAuth.",
+    "features": null,
+    "docker_images": {
+        "YAGPDB all-in-one": "ghcr.io/Frozenbloo/yagpdb-pterodactyl:latest"
+    },
+    "file_denylist": [],
+    "startup": "sh /entrypoint.sh",
+    "config": {
+        "files": "{}",
+        "startup": "{\"done\": \"Starting yagpdb web server\"}",
+        "logs": "{}",
+        "stop": "^C"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!/bin/ash\necho 'YAGPDB image is self-contained; nothing to install.'\n",
+            "container": "alpine:3.19",
+            "entrypoint": "ash"
+        }
+    },
+    "variables": [
+        {
+            "name": "Bot Token",
+            "description": "Discord bot token from the Bot tab of your application. Include the 'Bot ' prefix, e.g. 'Bot MTIz...'.",
+            "env_variable": "YAGPDB_BOTTOKEN",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string",
+            "field_type": "text"
+        },
+        {
+            "name": "Client ID",
+            "description": "Application (client) ID from the Discord Developer Portal.",
+            "env_variable": "YAGPDB_CLIENTID",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string",
+            "field_type": "text"
+        },
+        {
+            "name": "Client Secret",
+            "description": "OAuth2 client secret from the Discord Developer Portal.",
+            "env_variable": "YAGPDB_CLIENTSECRET",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string",
+            "field_type": "text"
+        },
+        {
+            "name": "Owner ID",
+            "description": "Your Discord user ID (enables owner-only bot controls).",
+            "env_variable": "YAGPDB_OWNER",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string",
+            "field_type": "text"
+        },
+        {
+            "name": "Host",
+            "description": "Public domain that points to this server (e.g. yagpdb.example.com). Must match the OAuth2 redirect in your Discord app and be served over HTTPS by your reverse proxy.",
+            "env_variable": "YAGPDB_HOST",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string",
+            "field_type": "text"
+        }
+    ]
+}
