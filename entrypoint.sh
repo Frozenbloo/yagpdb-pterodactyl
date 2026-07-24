@@ -1,17 +1,18 @@
 #!/bin/sh
 set -e
 
-# Alpine puts the Postgres binaries in a versioned dir; find it instead of hardcoding.
+cuid="$(id -u)"; cgid="$(id -g)"
+grep -q ":x:${cuid}:" /etc/passwd || echo "container:x:${cuid}:${cgid}::/home/container:/bin/sh" >> /etc/passwd
+grep -q ":x:${cgid}:" /etc/group  || echo "container:x:${cgid}:" >> /etc/group
+
 PGBIN="$(dirname "$(find /usr -type f -name initdb 2>/dev/null | head -n1)")"
 export PATH="$PGBIN:$PATH"
 
-# Everything writable must live under /home/container — the only volume Pterodactyl keeps.
 export PGDATA="/home/container/postgres"
 REDISDIR="/home/container/redis"
 mkdir -p "$PGDATA" "$REDISDIR"
 chmod 700 "$PGDATA"
 
-# First boot only: create the cluster and the yagpdb role/db (trust auth; loopback-only).
 if [ ! -s "$PGDATA/PG_VERSION" ]; then
     echo "[init] Creating PostgreSQL cluster..."
     initdb -D "$PGDATA" --username=postgres --auth-local=trust --auth-host=trust >/dev/null
@@ -23,8 +24,6 @@ SQL
     pg_ctl -D "$PGDATA" -m fast -w stop
 fi
 
-# Point YAGPDB at the local Postgres/Redis and at Pterodactyl's assigned port.
-# (Bot token, client id/secret, owner and host come in as env vars from the egg.)
 export YAGPDB_PQHOST="127.0.0.1"
 export YAGPDB_PQUSERNAME="yagpdb"
 export YAGPDB_PQPASSWORD="yagpdb"

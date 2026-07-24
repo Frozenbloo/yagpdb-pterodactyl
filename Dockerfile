@@ -15,7 +15,7 @@ RUN apk add --no-cache \
     postgresql16 postgresql16-contrib \
     redis supervisor
 
-RUN adduser -D -h /home/container container
+RUN adduser -D -h /home/container container && chmod 666 /etc/passwd /etc/group
 
 COPY --from=build /yagpdb /app/yagpdb
 COPY supervisord.conf /etc/supervisord.conf
