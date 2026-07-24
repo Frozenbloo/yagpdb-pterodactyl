@@ -10,7 +10,7 @@
     "description": "Yet Another General Purpose Discord Bot, self-hosted. Bundles PostgreSQL, Redis and the bot in one container via supervisord. Requires a reverse proxy with TLS in front for Discord OAuth.",
     "features": null,
     "docker_images": {
-        "YAGPDB all-in-one": "ghcr.io/Frozenbloo/yagpdb-pterodactyl:latest"
+        "YAGPDB all-in-one": "ghcr.io/frozenbloo/yagpdb-pterodactyl:latest"
     },
     "file_denylist": [],
     "startup": "sh /entrypoint.sh",
