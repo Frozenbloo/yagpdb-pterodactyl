@@ -2,8 +2,11 @@
 set -e
 
 cuid="$(id -u)"; cgid="$(id -g)"
-grep -q ":x:${cuid}:" /etc/passwd || echo "container:x:${cuid}:${cgid}::/home/container:/bin/sh" >> /etc/passwd
-grep -q ":x:${cgid}:" /etc/group  || echo "container:x:${cgid}:" >> /etc/group
+printf 'container:x:%s:%s:container:/home/container:/bin/sh\n' "$cuid" "$cgid" > /tmp/nss_passwd
+printf 'container:x:%s:\n' "$cgid" > /tmp/nss_group
+export NSS_WRAPPER_PASSWD=/tmp/nss_passwd
+export NSS_WRAPPER_GROUP=/tmp/nss_group
+export LD_PRELOAD="$(find /usr -name 'libnss_wrapper.so*' 2>/dev/null | head -n1)"
 
 PGBIN="$(dirname "$(find /usr -type f -name initdb 2>/dev/null | head -n1)")"
 export PATH="$PGBIN:$PATH"

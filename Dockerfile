@@ -13,9 +13,9 @@ FROM alpine:3.22
 RUN apk add --no-cache \
     ca-certificates tzdata \
     postgresql16 postgresql16-contrib \
-    redis supervisor
+    redis supervisor nss_wrapper
 
-RUN adduser -D -h /home/container container && chmod 666 /etc/passwd /etc/group
+RUN adduser -D -h /home/container container
 
 COPY --from=build /yagpdb /app/yagpdb
 COPY supervisord.conf /etc/supervisord.conf
